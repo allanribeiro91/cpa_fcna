@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Avaliações da Comunidade Acadêmica</title>
+
+    <!-- Adicionando jQuery via CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+    <!-- sweetalert2 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- CSS do Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Fontes e ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Estilio interno -->
+    <link rel="stylesheet" href="{% static 'styles/lista_avaliacoes.css' %}">
+
+
+
+</head>
+
+<body>
+    
+    <!-- cabecalho -->
+    <div class="cabecalho">
+        <div class="titulo-cabecalho">
+            Avaliações da<br> Comunidade Acadêmica
+        </div>
+        <div class="imagem-cabecalho">
+            <img src="{% static 'assets/logos/faculdade_cna_negativo.png' %}" alt="Logo Faculdade CNA">
+        </div>
+    </div>
+
+    <!-- Usuário -->
+    <div class="usuario">
+        Olá, <b>{{ usuario.primeiro_ultimo_nome }}</b>
+    </div>
+
+    <!-- Filtro -->
+    <div class="filtro">
+        <button id="btnEmAberto" class="btn btn-custom btn-block active">Em Aberto</button>
+        <button id="btnEmAberto" class="btn btn-custom btn-block">Respondidos</button>
+    </div>
+    
+    <!-- Lista de Avaliações -->
+
+    {% for formulario in tab_aval_disciplinas %}
+        <div class="card-avaliacao" id="cardAvaliacao" data-id="{{ formulario.card_dados.uuid }}" data-formulario="{{ formulario.card_dados.formulario }}">
+            <div class="titulo-avaliacao">{{ formulario.card_dados.disciplina }}</div>
+            <div class="infos-avaliacao">
+                Disponível até: {{ formulario.card_dados.data_fim|date:"d/m/Y" }}<br>
+                Status: 
+                    {% if formulario.card_dados.status == 'Não Iniciado' %}
+                        <span style="font-weight: bold; color: red">Não Iniciado</span>
+                    {% endif %}
+                    {% if formulario.card_dados.status == 'Iniciado' %}
+                        <span style="font-weight: bold; color: rgb(226, 177, 0)">Iniciado</span>
+                    {% endif %}
+                    {% if formulario.card_dados.status == 'Respondido' %}
+                        <span style="font-weight: bold; color: rgb(47, 177, 0)">Respondido</span>
+                    {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+
+
+    <!-- <div class="card-avaliacao">
+        <div class="titulo-avaliacao">AD: Introdução ao Agronegócio</div>
+        <div class="infos-avaliacao">
+            Disponível até: 12/04/2024<br>
+            Status: <span style="font-weight: bold; color: rgb(10, 151, 0)">Respondido</span>
+        </div>
+    </div>
+    <div class="card-avaliacao">
+        <div class="titulo-avaliacao">AD: Estudos Culturais e Antropológicos</div>
+        <div class="infos-avaliacao">
+            Disponível até: 12/04/2024<br>
+            Status: <span style="font-weight: bold; color: rgb(255, 157, 0)">Iniciado</span>
+        </div>
+    </div>
+    <div class="card-avaliacao">
+        <div class="titulo-avaliacao">Avaliação Anual</div>
+        <div class="infos-avaliacao">
+            Disponível até: 12/04/2024<br>
+            Status: <span style="font-weight: bold; color: rgb(255, 157, 0)">Iniciado</span>
+        </div>
+    </div> -->
+
+
+
+    <script src="{% static 'js/lista_avaliacoes.js' %}"></script>
+
+
+
+</body>
+
+
+
+</html>

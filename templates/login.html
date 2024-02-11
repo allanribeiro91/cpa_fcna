@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Avaliações da Comunidade Acadêmica</title>
+
+    <!-- Adicionando jQuery via CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+    <!-- sweetalert2 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- CSS do Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Fontes e ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Estilio interno -->
+    <link rel="stylesheet" href="{% static 'styles/login.css' %}">
+
+    <!-- Imagem de fundo -->
+    <style>
+        :root {
+            --url-background-image: url("{% static 'assets/login/gado_leite.jpg' %}");
+        }
+        body {
+            background-image: var(--url-background-image);
+
+        }
+    </style>
+
+</head>
+
+<body>
+    
+    <div class="marca-fcna">
+        <img src="{% static 'assets/logos/faculdade_cna_negativo.png' %}" alt="Logo Faculdade CNA">
+    </div>
+    
+    <div class="login-container">
+        <p class="titulo">Avaliações da<br> Comunidade Acadêmica</p>
+        <form>
+
+            <div class="form-floating" style="margin-bottom: 15px;">                            
+                <input type="text" class="form-control" id="cpf" placeholder="CPF" >
+                <label>CPF</label>
+            </div>
+            <div class="form-floating">                            
+                <input type="date" class="form-control" id="data_nascimento" placeholder="Data de Nascimento" >
+                <label>Data de Nascimento</label>
+            </div>
+
+            <button id="botaoEntrar" class="btn btn-custom btn-block">Entrar</button>
+        </form>
+    </div>
+
+    <script src="{% static 'js/_alerts.js' %}"></script>
+    <script src="{% static 'js/_funcoes.js' %}"></script>
+    <script src="{% static 'js/login.js' %}"></script>
+
+
+
+</body>
+
+
+
+</html>

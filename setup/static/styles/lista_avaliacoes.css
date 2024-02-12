@@ -90,3 +90,27 @@ body {
 .infos-avaliacao {
     font-size:1.8vh;
 }
+
+
+.sair {
+    /* background-color: #c7c7c7; */
+    /* border-radius: 10px; */
+    /* padding: 5px; */
+    font-weight: normal !important;
+    left: 0px;
+    margin-left: 5vw;
+    text-align: left;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.botao-sair {
+    border-radius: 10px;
+    padding: 5px;
+    font-weight: normal !important;
+    left: 0px;
+    text-align: left;
+    width: 80px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

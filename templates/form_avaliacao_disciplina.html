@@ -34,67 +34,318 @@
     
 
 
-    <div class="tab-voltar">
-        
-        <i class="fas fa-arrow-left">Voltar</i> 
-
+    <div class="tab-voltar" id="voltar">
+        <i class="fas fa-arrow-left"></i>&nbsp;<span style="font-weight: normal;">Voltar</span>
     </div>
 
-    <div class="formulario">
+    <div 
+        class="formulario" 
+        data-uuid-formulario="{{ formulario.uuid }}"
+        data-uuid-usuario="{{ formulario.discente.uuid}}"
+    >
         <div class="titulo-formulario">
-            Avaliação da Disciplina<br>
-            <b>Introdução ao Agronegócio</b>
+            <span style="font-size: 2vh;">Avaliação da Disciplina</span><br>
+            <b style="color: #005048">{{ formulario.get_disciplina_display }}</b>
         </div>
+
+        <div class="status-formulario">
+            Status:
+                {% if formulario.get_status_display == 'Não Iniciado' %}
+                    <span style="font-weight: bold; color: #ab0000">Não Iniciado</span>
+                {% endif %}
+                {% if formulario.get_status_display == 'Parcial' %}
+                    <span style="font-weight: bold; color: #ff8c00">Parcial</span>  
+                {% endif %}
+                {% if formulario.get_status_display == 'Respondido' %}
+                    <span style="font-weight: bold; color: #2fb100">Respondido</span>
+                {% endif %}
+            <br>Respondido em: {{ formulario.ultimo_registro|date:'d/m/Y H:i:s'|default:'-'}}
+        </div>
+
+
     </div>
 
-    <!-- Pergunta 1 -->
-    <div class="pergunta-container">
-        <div class="pergunta-titulo">1. A disciplina foi apresentada com objetivos claros?</div>
-        <div class="slider-container">
-            <div class="slider-with-marks">
-                <input type="range" id="rangeSlider" name="avaliacao" min="0" max="10" step="1" value="0" class="has-value">
-            </div>
-            <div class="slider-values">
-                {% for number in numbers %}
-                    <span>{{ number }}</span>
-                {% endfor %}
-            </div>
-            <div id="sliderValue">Selecione um valor</div>
-        </div>
-    </div>
+    <!-- Formulário -->
+    <form class="formulario-dados" id="formAvaliacaoDisciplina">
+    {% csrf_token %}
 
-    <!-- Pergunta 2 -->
-    <div class="pergunta-container">
-        <div class="pergunta-titulo">2. Como você avalia a relevância do conteúdo da disciplina para sua formação profissional?</div>
-        <div class="slider-container">
-            <div class="slider-with-marks">
-                <input type="range" id="rangeSlider" name="avaliacao" min="0" max="10" step="1" value="0" class="has-value">
+        <!-- Avaliação Geral -->
+        <div class="pergunta-grupo">Avaliação Geral da Disciplina</div>
+            <!-- Pergunta 1 -->
+            <div class="pergunta-container">
+                <div class="pergunta-titulo">1. A disciplina foi apresentada com objetivos claros?</div>
+                <div class="pergunta-legenda">0=Nenhum um pouco e 10=Muito</div>
+                <div class="slider-container">
+                    <div class="slider-with-marks">
+                        <input type="range" id="pergunta1" name="p1_disciplina_objetivos_claros" min="0" max="10" step="1" value="{{ formulario.p1_disciplina_objetivos_claros|default:'0' }}" class="has-value">
+                    </div>
+                    <div class="slider-values">
+                        {% for number in numbers %}
+                            <span>{{ number }}</span>
+                        {% endfor %}
+                    </div>
+                    {% if formulario.p1_disciplina_objetivos_claros %}
+                        <div id="perguntaValor1">Valor selecionado: <b>{{ formulario.p1_disciplina_objetivos_claros }}</b></div>
+                    {% else %}
+                        <div id="perguntaValor1">Selecione um valor</div>
+                    {% endif %}
+                </div>
             </div>
-            <div class="slider-values">
-                {% for number in numbers %}
-                    <span>{{ number }}</span>
-                {% endfor %}
-            </div>
-            <div id="sliderValue">Selecione um valor</div>
-        </div>
-    </div>
 
-    <!-- Pergunta 3 -->
-    <div class="pergunta-container">
-        <div class="pergunta-titulo">3. Como você avalia o material didático e bibliografia fornecido ou citado?</div>
-        <div class="slider-container">
-            <div class="slider-with-marks">
-                <input type="range" id="rangeSlider" name="avaliacao" min="0" max="10" step="1" value="0" class="has-value">
+            <!-- Pergunta 2 -->
+            <div class="pergunta-container">
+                <div class="pergunta-titulo">2. Como você avalia a relevância do conteúdo da disciplina para sua formação profissional?</div>
+                <div class="pergunta-legenda">0=Nenhum um pouco e 10=Muito</div>
+                <div class="slider-container">
+                    <div class="slider-with-marks">
+                        <input type="range" id="pergunta2" name="p2_conteudo_disciplina" min="0" max="10" step="1" value="{{ formulario.p2_conteudo_disciplina|default:'0' }}" class="has-value">
+                    </div>
+                    <div class="slider-values">
+                        {% for number in numbers %}
+                            <span>{{ number }}</span>
+                        {% endfor %}
+                    </div>
+                    {% if formulario.p2_conteudo_disciplina %}
+                        <div id="perguntaValor2">Valor selecionado: <b>{{ formulario.p2_conteudo_disciplina }}</b></div>
+                    {% else %}
+                        <div id="perguntaValor2">Selecione um valor</div>
+                    {% endif %}
+                </div>
             </div>
-            <div class="slider-values">
-                {% for number in numbers %}
-                    <span>{{ number }}</span>
-                {% endfor %}
+
+            <!-- Pergunta 3 -->
+            <div class="pergunta-container">
+                <div class="pergunta-titulo">3. Como você avalia o material didático e bibliografia fornecido ou citado?</div>
+                <div class="pergunta-legenda">0=Muito Ruim e 10=Muito Bom</div>
+                <div class="slider-container">
+                    <div class="slider-with-marks">
+                        <input type="range" id="pergunta3" name="p3_bibliografia" min="0" max="10" step="1" value="{{ formulario.p3_bibliografia|default:'0' }}" class="has-value">
+                    </div>
+                    <div class="slider-values">
+                        {% for number in numbers %}
+                            <span>{{ number }}</span>
+                        {% endfor %}
+                    </div>
+                    {% if formulario.p3_bibliografia %}
+                        <div id="perguntaValor3">Valor selecionado: <b>{{ formulario.p3_bibliografia }}</b></div>
+                    {% else %}
+                        <div id="perguntaValor3">Selecione um valor</div>
+                    {% endif %}
+                </div>
             </div>
-            <div id="sliderValue">Selecione um valor</div>
+
+            <!-- Pergunta 4 -->
+            <div class="pergunta-container">
+                <div class="pergunta-titulo">4. Na sua opinião, qual o grau de dificuldade da disciplina?</div>
+                <div class="pergunta-legenda">0=Muito Fácil e 10=Muito Difícil</div>
+                <div class="slider-container">
+                    <div class="slider-with-marks">
+                        <input type="range" id="pergunta4" name="p4_grau_dificuldade_disciplina" min="0" max="10" step="1" value="{{ formulario.p4_grau_dificuldade_disciplina|default:'0' }}" class="has-value">
+                    </div>
+                    <div class="slider-values">
+                        {% for number in numbers %}
+                            <span>{{ number }}</span>
+                        {% endfor %}
+                    </div>
+                    {% if formulario.p4_grau_dificuldade_disciplina %}
+                        <div id="perguntaValor4">Valor selecionado: <b>{{ formulario.p4_grau_dificuldade_disciplina }}</b></div>
+                    {% else %}
+                        <div id="perguntaValor4">Selecione um valor</div>
+                    {% endif %}
+                </div>
+            </div>
+
+        
+        <!-- Avaliação Docente -->
+        <div class="pergunta-grupo">Avaliação do Docente</div>
+            <!-- Pergunta 5 -->
+            <div class="pergunta-container">
+                <div class="pergunta-titulo">5. Como você avalia a qualidade das videoaulas da disciplina?</div>
+                <div class="pergunta-legenda">0=Muito Ruim e 10=Muito Bom</div>
+                <div class="slider-container">
+                    <div class="slider-with-marks">
+                        <input type="range" id="pergunta4" name="p4_grau_dificuldade_disciplina" min="0" max="10" step="1" value="{{ formulario.p4_grau_dificuldade_disciplina|default:'0' }}" class="has-value">
+                    </div>
+                    <div class="slider-values">
+                        {% for number in numbers %}
+                            <span>{{ number }}</span>
+                        {% endfor %}
+                    </div>
+                    {% if formulario.p4_grau_dificuldade_disciplina %}
+                        <div id="perguntaValor4">Valor selecionado: <b>{{ formulario.p4_grau_dificuldade_disciplina }}</b></div>
+                    {% else %}
+                        <div id="perguntaValor4">Selecione um valor</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Pergunta 6 -->
+            <div class="pergunta-container">
+                <div class="pergunta-titulo">6. Como você avalia a qualidade das aulas online?</div>
+                <div class="pergunta-legenda">0=Muito Ruim e 10=Muito Bom</div>
+                <div class="slider-container">
+                    <div class="slider-with-marks">
+                        <input type="range" id="pergunta4" name="p4_grau_dificuldade_disciplina" min="0" max="10" step="1" value="{{ formulario.p4_grau_dificuldade_disciplina|default:'0' }}" class="has-value">
+                    </div>
+                    <div class="slider-values">
+                        {% for number in numbers %}
+                            <span>{{ number }}</span>
+                        {% endfor %}
+                    </div>
+                    {% if formulario.p4_grau_dificuldade_disciplina %}
+                        <div id="perguntaValor4">Valor selecionado: <b>{{ formulario.p4_grau_dificuldade_disciplina }}</b></div>
+                    {% else %}
+                        <div id="perguntaValor4">Selecione um valor</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Pergunta 7 -->
+            <div class="pergunta-container">
+                <div class="pergunta-titulo">7. Como você avalia a competência e domínio do conteúdo pelo professor?</div>
+                <div class="pergunta-legenda">0=Muito Ruim e 10=Muito Bom</div>
+                <div class="slider-container">
+                    <div class="slider-with-marks">
+                        <input type="range" id="pergunta4" name="p4_grau_dificuldade_disciplina" min="0" max="10" step="1" value="{{ formulario.p4_grau_dificuldade_disciplina|default:'0' }}" class="has-value">
+                    </div>
+                    <div class="slider-values">
+                        {% for number in numbers %}
+                            <span>{{ number }}</span>
+                        {% endfor %}
+                    </div>
+                    {% if formulario.p4_grau_dificuldade_disciplina %}
+                        <div id="perguntaValor4">Valor selecionado: <b>{{ formulario.p4_grau_dificuldade_disciplina }}</b></div>
+                    {% else %}
+                        <div id="perguntaValor4">Selecione um valor</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Pergunta 8 -->
+            <div class="pergunta-container">
+                <div class="pergunta-titulo">8. Como você avalia a capacidade do professor de despertar o interesse dos estudantes em relação ao conteúdo?</div>
+                <div class="pergunta-legenda">0=Muito Baixa e 10=Muito Alta</div>
+                <div class="slider-container">
+                    <div class="slider-with-marks">
+                        <input type="range" id="pergunta4" name="p4_grau_dificuldade_disciplina" min="0" max="10" step="1" value="{{ formulario.p4_grau_dificuldade_disciplina|default:'0' }}" class="has-value">
+                    </div>
+                    <div class="slider-values">
+                        {% for number in numbers %}
+                            <span>{{ number }}</span>
+                        {% endfor %}
+                    </div>
+                    {% if formulario.p4_grau_dificuldade_disciplina %}
+                        <div id="perguntaValor4">Valor selecionado: <b>{{ formulario.p4_grau_dificuldade_disciplina }}</b></div>
+                    {% else %}
+                        <div id="perguntaValor4">Selecione um valor</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Pergunta 9 -->
+            <div class="pergunta-container">
+                <div class="pergunta-titulo">9. Como você avalia a disponibilidade do professor para esclarecer dúvidas e solucionar dificuldades dos alunos relacionados ao conteúdo da disciplina?</div>
+                <div class="pergunta-legenda">0=Muito Baixa e 10=Muito Alta</div>
+                <div class="slider-container">
+                    <div class="slider-with-marks">
+                        <input type="range" id="pergunta4" name="p4_grau_dificuldade_disciplina" min="0" max="10" step="1" value="{{ formulario.p4_grau_dificuldade_disciplina|default:'0' }}" class="has-value">
+                    </div>
+                    <div class="slider-values">
+                        {% for number in numbers %}
+                            <span>{{ number }}</span>
+                        {% endfor %}
+                    </div>
+                    {% if formulario.p4_grau_dificuldade_disciplina %}
+                        <div id="perguntaValor4">Valor selecionado: <b>{{ formulario.p4_grau_dificuldade_disciplina }}</b></div>
+                    {% else %}
+                        <div id="perguntaValor4">Selecione um valor</div>
+                    {% endif %}
+                </div>
+            </div>
+
+        
+        <!-- Autoavaliação -->
+        <div class="pergunta-grupo">Autoavaliação Discente</div>
+            <!-- Pergunta 10 -->
+            <div class="pergunta-container">
+                <div class="pergunta-titulo">10. Durante a disciplina, o seu esforço foi?</div>
+                <div class="pergunta-legenda">0=Muito Baixo e 10=Muito Alto</div>
+                <div class="slider-container">
+                    <div class="slider-with-marks">
+                        <input type="range" id="pergunta4" name="p4_grau_dificuldade_disciplina" min="0" max="10" step="1" value="{{ formulario.p4_grau_dificuldade_disciplina|default:'0' }}" class="has-value">
+                    </div>
+                    <div class="slider-values">
+                        {% for number in numbers %}
+                            <span>{{ number }}</span>
+                        {% endfor %}
+                    </div>
+                    {% if formulario.p4_grau_dificuldade_disciplina %}
+                        <div id="perguntaValor4">Valor selecionado: <b>{{ formulario.p4_grau_dificuldade_disciplina }}</b></div>
+                    {% else %}
+                        <div id="perguntaValor4">Selecione um valor</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Pergunta 11 -->
+            <div class="pergunta-container">
+                <div class="pergunta-titulo">11. Seu grau de entendimento nesta disciplina foi?</div>
+                <div class="pergunta-legenda">0=Muito Baixo e 10=Muito Alto</div>
+                <div class="slider-container">
+                    <div class="slider-with-marks">
+                        <input type="range" id="pergunta4" name="p4_grau_dificuldade_disciplina" min="0" max="10" step="1" value="{{ formulario.p4_grau_dificuldade_disciplina|default:'0' }}" class="has-value">
+                    </div>
+                    <div class="slider-values">
+                        {% for number in numbers %}
+                            <span>{{ number }}</span>
+                        {% endfor %}
+                    </div>
+                    {% if formulario.p4_grau_dificuldade_disciplina %}
+                        <div id="perguntaValor4">Valor selecionado: <b>{{ formulario.p4_grau_dificuldade_disciplina }}</b></div>
+                    {% else %}
+                        <div id="perguntaValor4">Selecione um valor</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Pergunta 12 -->
+            <div class="pergunta-container">
+                <div class="pergunta-titulo">12. Após cursar a disciplina, seu interesse pelo assunto aumentou?</div>
+                <div class="pergunta-legenda">0=Nada e 10=Muito</div>
+                <div class="slider-container">
+                    <div class="slider-with-marks">
+                        <input type="range" id="pergunta4" name="p4_grau_dificuldade_disciplina" min="0" max="10" step="1" value="{{ formulario.p4_grau_dificuldade_disciplina|default:'0' }}" class="has-value">
+                    </div>
+                    <div class="slider-values">
+                        {% for number in numbers %}
+                            <span>{{ number }}</span>
+                        {% endfor %}
+                    </div>
+                    {% if formulario.p4_grau_dificuldade_disciplina %}
+                        <div id="perguntaValor4">Valor selecionado: <b>{{ formulario.p4_grau_dificuldade_disciplina }}</b></div>
+                    {% else %}
+                        <div id="perguntaValor4">Selecione um valor</div>
+                    {% endif %}
+                </div>
+            </div>
+
+
+        <!-- Comentários gerais -->
+        <div class="pergunta-grupo">Comentários gerais</div>
+            <div class="pergunta-container">
+                <div class="pergunta-titulo">Utilize o espaço abaixo para fazer algum comentário, crítica ou observação acerca da disciplina ou docente.</div>
+                <input type="textarea" id="pergunta4" style="height: 20vh; border-radius: 10px; border: 1px; margin-top: 10px; margin-bottom: 10px;" name="p4_grau_dificuldade_disciplina" value="" class="has-value">
+            </div>
+
+        <!-- Salvar -->
+        <div class="salvar" id="btnSalvar">
+            <i class="fa-solid fa-floppy-disk"></i>&nbsp;Salvar
         </div>
-    </div>
-    
+
+    </form>
+        
+
+    <script src="{% static 'js/_alerts.js' %}"></script>
     <script src="{% static 'js/avaliacao_disciplina.js' %}"></script>
 
 </body>
